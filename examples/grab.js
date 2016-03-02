@@ -500,6 +500,9 @@ Grabber.prototype.activateEntity = function(entityID, grabbedProperties) {
     var grabbableData = getEntityCustomData(GRABBABLE_DATA_KEY, entityID, DEFAULT_GRABBABLE_DATA);
     var invertSolidWhileHeld = grabbableData["invertSolidWhileHeld"];
     var data = getEntityCustomData(GRAB_USER_DATA_KEY, entityID, {});
+    if (!data["activated"]) {
+        Entities.callEntityMethod(entityID, 'grabEntity', [entityID]);
+    }
     data["activated"] = true;
     data["avatarId"] = MyAvatar.sessionUUID;
     data["refCount"] = data["refCount"] ? data["refCount"] + 1 : 1;
@@ -522,6 +525,7 @@ Grabber.prototype.deactivateEntity = function(entityID) {
     if (data && data["refCount"]) {
         data["refCount"] = data["refCount"] - 1;
         if (data["refCount"] < 1) {
+            Entities.callEntityMethod(entityID, 'ungrabEntity', [entityID]);
             Entities.editEntity(entityID, {
                 gravity: data["gravity"],
                 collisionless: data["collisionless"],
