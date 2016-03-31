@@ -236,7 +236,7 @@ float EntityActionInterface::extractFloatArgument(QString objectName, QVariantMa
     bool variantOk = true;
     float value = variant.toFloat(&variantOk);
 
-    if (!variantOk || std::isnan(value)) {
+    if (!variantOk || glm::isnan(value)) {
         ok = false;
         return 0.0f;
     }
